@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+interface Props {
+  troubleshooting: CollectionEntry<"projects">["data"]["troubleshooting"][number]
+}
+const { troubleshooting } = Astro.props
+
+const steps = [
+  { key: "problem", label: "문제" },
+  { key: "analysis", label: "분석" },
+  { key: "action", label: "행동" },
+  { key: "result", label: "결과" },
+] as const
+---
+
+<div>
+  <h3>{troubleshooting.title}</h3>
+  <dl>
+    {steps.map((step) => (
+      <div>
+        <dt>{step.label}</dt>
+        <dd set:html={troubleshooting[step.key]} />
+      </div>
+    ))}
+  </dl>
+</div>

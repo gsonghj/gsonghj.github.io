@@ -1,0 +1,42 @@
+---
+import { Icon } from "astro-icon/components"
+
+import ThemeToggle from "@/components/ThemeToggle.astro"
+import { profile } from "@/data/profile"
+
+interface Props {
+  layout: "base" | "project"
+}
+const { layout } = Astro.props
+---
+
+<header
+  id="header"
+  class="flex items-center justify-between gap-2 p-4 motion-safe:transition-[padding] md:p-8"
+>
+  <a
+    href="/"
+    class="inline-flex shrink-0 items-center justify-center px-2 py-1 text-base font-medium whitespace-nowrap"
+  >
+    송현정 포트폴리오
+  </a>
+
+  {layout === "project" && (
+    <nav aria-label="프로필 링크" class="flex items-center justify-center gap-2">
+      {profile.map((item) => (
+        <a
+          href={item.href}
+          target={item.openInNewTab ? "_blank" : undefined}
+          rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+          aria-label={item.ariaLabel}
+          class="inline-flex items-center justify-center rounded-full px-2 py-1 text-base font-normal underline decoration-transparent decoration-wavy decoration-2 underline-offset-4 hover:bg-primary/50 hover:decoration-primary focus-visible:bg-primary/50 focus-visible:decoration-primary motion-safe:transition-[background-color,text-decoration-color]"
+        >
+          <Icon name={item.icon} aria-hidden="true" class="shrink-0 md:hidden" />
+          <span class="hidden md:block">{item.label}</span>
+        </a>
+      ))}
+    </nav>
+  )}
+
+  <ThemeToggle />
+</header>

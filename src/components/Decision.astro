@@ -1,0 +1,10 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+interface Props {
+  decision: CollectionEntry<"projects">["data"]["decisions"][number]
+}
+const { decision } = Astro.props
+---
+
+<li set:html={decision} />

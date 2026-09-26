@@ -1,0 +1,19 @@
+---
+interface Props {
+  href: string
+  project: string
+  label: string
+}
+const { href, project, label } = Astro.props
+---
+
+<a
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label={`${project} ${label} (새 탭에서 열림)`}
+  class="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-foreground px-2 py-1 text-sm font-medium hover:bg-foreground hover:text-background focus-visible:bg-foreground focus-visible:text-background active:scale-[0.98] motion-safe:transition-[color,background-color,scale]"
+>
+  <slot />
+  {label}
+</a>

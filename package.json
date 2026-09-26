@@ -7,14 +7,36 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "dependencies": {
-    "astro": "^7.3.3"
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.3",
+    "astro-icon": "^1.2.0",
+    "embla-carousel": "^8.6.0",
+    "embla-carousel-autoplay": "^8.6.0",
+    "pretendard": "^1.3.9",
+    "tailwindcss": "^4.3.3"
   },
   "allowScripts": {
     "esbuild": true
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/ts-plugin": "^1.10.12",
+    "@eslint/js": "^10.0.1",
+    "@iconify-json/radix-icons": "^1.2.6",
+    "eslint": "^10.11.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "eslint-plugin-better-tailwindcss": "^4.7.0",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "prettier": "^3.9.8",
+    "prettier-plugin-astro": "^1.0.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.1"
   }
 }

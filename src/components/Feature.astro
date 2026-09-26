@@ -1,0 +1,20 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+interface Props {
+  feature: CollectionEntry<"projects">["data"]["features"][number]
+}
+const { feature } = Astro.props
+---
+
+<li>
+  <h3>{feature.title}</h3>
+  <ul>
+    {feature.details.map(({ content, tag }) => (
+      <li>
+        <Fragment set:html={content} />
+        {tag && <span>{tag}</span>}
+      </li>
+    ))}
+  </ul>
+</li>

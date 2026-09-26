@@ -1,0 +1,23 @@
+---
+import { profile } from "@/data/profile"
+---
+
+<footer class="page-wrap flex flex-col items-center justify-center gap-2">
+  <div class="flex flex-wrap items-center justify-center gap-2">
+    {profile.map((item) => (
+      <a
+        href={item.href}
+        target={item.openInNewTab ? "_blank" : undefined}
+        rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+        aria-label={item.ariaLabel}
+        class="inline-flex items-center justify-center px-2 py-1 text-sm font-normal text-muted-foreground underline decoration-transparent decoration-solid decoration-1 underline-offset-4 hover:text-foreground hover:decoration-foreground focus-visible:text-foreground focus-visible:decoration-foreground motion-safe:transition-[color,text-decoration-color]"
+      >
+        {item.label}
+      </a>
+    ))}
+  </div>
+
+  <p class="text-sm font-normal text-muted-foreground">
+    감사합니다 <span aria-hidden="true">☘️</span>
+  </p>
+</footer>

@@ -1,0 +1,51 @@
+---
+import { Icon } from "astro-icon/components"
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  role="switch"
+  aria-checked="false"
+  aria-label="다크 모드"
+  class="relative isolate inline-grid h-10 w-18 shrink-0 grid-cols-2 place-items-center rounded-full bg-surface p-1
+  before:absolute before:top-1 before:left-1 before:-z-1 before:size-8 before:rounded-full before:bg-background motion-safe:before:transition-[translate] dark:before:translate-x-full"
+>
+  <Icon
+    name="radix-icons:sun"
+    aria-hidden="true"
+    class="shrink-0 text-foreground dark:text-foreground/50"
+  />
+  <Icon
+    name="radix-icons:moon"
+    aria-hidden="true"
+    class="shrink-0 text-foreground/50 dark:text-foreground"
+  />
+</button>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>("#theme-toggle")
+
+  if (button) {
+    const syncState = () => {
+      button.setAttribute(
+        "aria-checked",
+        String(document.documentElement.classList.contains("dark"))
+      )
+    }
+
+    // 레이아웃에서 설정한 테마 반영
+    syncState()
+
+    button.addEventListener("click", () => {
+      const isDark = document.documentElement.classList.toggle("dark")
+      syncState()
+
+      try {
+        localStorage.setItem("theme", isDark ? "dark" : "light")
+      } catch {
+        // 저장소를 사용할 수 없으면 현재 페이지에만 테마를 적용한다.
+      }
+    })
+  }
+</script>

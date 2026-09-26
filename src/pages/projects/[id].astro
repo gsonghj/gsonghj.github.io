@@ -1,0 +1,79 @@
+---
+import type { GetStaticPaths } from "astro"
+import { Image } from "astro:assets"
+import { type CollectionEntry, getCollection } from "astro:content"
+
+import Decision from "@/components/Decision.astro"
+import Feature from "@/components/Feature.astro"
+import Overview from "@/components/Overview.astro"
+import Troubleshooting from "@/components/Troubleshooting.astro"
+import ProjectLayout from "@/layouts/ProjectLayout.astro"
+
+export const getStaticPaths = (async () => {
+  const projects = await getCollection("projects")
+  return projects.map((project) => ({ params: { id: project.id }, props: { project } }))
+}) satisfies GetStaticPaths
+
+interface Props {
+  project: CollectionEntry<"projects">
+}
+const { project } = Astro.props
+const { overview, features, flowchart, decisions, troubleshooting } = project.data
+---
+
+<ProjectLayout project={project}>
+  <Fragment slot="overview">
+    {overview.map((o) => (
+      <Overview overview={o} />
+    ))}
+  </Fragment>
+
+  <Fragment slot="features">
+    {features.map((f) => (
+      <Feature feature={f} />
+    ))}
+  </Fragment>
+
+  {flowchart && (
+    <div slot="supplementary" role="img" aria-label={flowchart.label} class="page-wrap">
+      <div class="dark:hidden">
+        <Image
+          src={flowchart.lightTb}
+          alt=""
+          widths={[800, 1600]}
+          sizes="100vw"
+          class="md:hidden"
+        />
+        <Image
+          src={flowchart.lightLr}
+          alt=""
+          widths={[800, 1600, 2400]}
+          sizes="(min-width: 72rem) 66rem, 100vw"
+          class="hidden md:block"
+        />
+      </div>
+      <div class="hidden dark:block">
+        <Image src={flowchart.darkTb} alt="" widths={[800, 1600]} sizes="100vw" class="md:hidden" />
+        <Image
+          src={flowchart.darkLr}
+          alt=""
+          widths={[800, 1600, 2400]}
+          sizes="(min-width: 72rem) 66rem, 100vw"
+          class="hidden md:block"
+        />
+      </div>
+    </div>
+  )}
+
+  <Fragment slot="decisions">
+    {decisions.map((d) => (
+      <Decision decision={d} />
+    ))}
+  </Fragment>
+
+  <Fragment slot="troubleshooting">
+    {troubleshooting.map((t) => (
+      <Troubleshooting troubleshooting={t} />
+    ))}
+  </Fragment>
+</ProjectLayout>

@@ -1,17 +1,83 @@
 ---
+import { Image } from "astro:assets"
+import { getCollection } from "astro:content"
+import { Icon } from "astro-icon/components"
 
+import Footer from "@/components/Footer.astro"
+import Header from "@/components/Header.astro"
+import { profile } from "@/data/profile"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+
+const projects = (await getCollection("projects")).sort((a, b) =>
+  (b.data.period.end ?? "9999.12").localeCompare(a.data.period.end ?? "9999.12")
+)
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="송현정 프론트엔드 신입 포트폴리오"
+  description="송현정 프론트엔드 신입 포트폴리오입니다."
+>
+  <Header layout="base" />
+
+  <main>
+    <section class="page-wrap motion-safe:animate-rise">
+      <h1 class="text-center text-3xl/relaxed font-bold md:text-4xl">
+        <span class="block">
+          안녕하세요{" "}
+          <span class="inline-block origin-[70%_70%] motion-safe:animate-wave" aria-hidden="true">
+            👋
+          </span>
+        </span>
+        <span class="block">
+          프론트엔드 개발자 <span class="text-primary">송현정</span>입니다
+        </span>
+      </h1>
+      <p class="text-center text-lg/relaxed font-medium md:text-xl">
+        <span class="font-semibold">팀과 함께</span> 고민하고, 그 답을{" "}
+        <span class="font-semibold">사용자 경험</span>으로 만듭니다
+      </p>
+
+      <div class="flex items-center justify-center gap-2">
+        {profile.map((item) => (
+          <a
+            href={item.href}
+            target={item.openInNewTab ? "_blank" : undefined}
+            rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+            aria-label={item.ariaLabel}
+            class="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-foreground px-2 py-1 text-sm font-medium hover:-translate-y-1 hover:border-primary hover:bg-primary focus-visible:border-primary focus-visible:bg-primary active:translate-y-0 active:scale-[0.98] motion-safe:transition-[background-color,border-color,translate,scale]"
+          >
+            <Icon name={item.icon} aria-hidden="true" class="shrink-0" />
+            <span class="hidden md:block">{item.label}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-heading" class="page-wrap">
+      <h2 id="projects-heading" class="text-xl font-semibold md:text-2xl">
+        프로젝트
+      </h2>
+
+      <ul>
+        {projects.map(({ id, data }) => (
+          <li class="motion-safe:animate-reveal">
+            <div>
+              <p>{data.type}</p>
+              <a href={`/projects/${id}`}>{data.title}</a>
+              <p>{data.description}</p>
+              <div class="aspect-5/3 min-w-0 flex-[0_0_100%]">
+                <Image
+                  src={data.thumbnail}
+                  alt={`${data.title} 썸네일`}
+                  class="block size-full bg-surface object-cover"
+                />
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

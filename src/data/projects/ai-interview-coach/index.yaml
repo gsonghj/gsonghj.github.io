@@ -1,0 +1,91 @@
+title: AI 면접 코치
+description: 이력서와 채용공고를 기반으로 LangGraph 에이전트가 맞춤형 질문을 생성하고, 답변을 평가한 뒤 피드백을 제공하는 AI 모의면접 시뮬레이터입니다.
+type: 팀 프로젝트 이후 개인 프로젝트로 확장
+period:
+  start: "2025.05"
+  end: "2026.02"
+techStack:
+  - TypeScript
+  - React
+  - React Router
+  - Tailwind CSS
+  - shadcn/ui
+  - Python
+  - FastAPI
+  - LangGraph
+  - OpenAI GPT
+  - PostgreSQL
+  - Vercel
+  - Railway
+links:
+  github: https://github.com/gsonghj/ai-interview-coach
+  demo: https://ai-interview-coach-sepia.vercel.app
+thumbnail: ./thumbnail.png
+images:
+  - ./1.png
+  - ./2.png
+  - ./3.png
+  - ./4.png
+  - ./5.png
+
+flowchart:
+  label: LangGraph 에이전트 흐름도
+  lightLr: ./flowchart-light-lr.png
+  lightTb: ./flowchart-light-tb.png
+  darkLr: ./flowchart-dark-lr.png
+  darkTb: ./flowchart-dark-tb.png
+
+overview:
+  - "구직자의 면접 준비 부담을 줄이고 정교한 피드백으로 성장을 돕는 개인화된 ==AI 모의면접 시뮬레이터==입니다. **LangGraph로 상태 기반 Agent 흐름을 설계**하고, LLM을 활용해 이력서 분석부터 맞춤형 질문 생성, 답변 평가, 종합 리포트까지 면접 전반의 로직을 구성했습니다."
+  - "**8인 팀 프로젝트에서는 팀장**으로서 전체 파이프라인을 설계하고 팀원들의 노드별 고도화 결과물을 통합했습니다. 이후 Colab, Gradio 기반 프로토타입을 React, FastAPI, PostgreSQL 기반 **웹서비스로 재설계하며 개인 프로젝트로 확장**했습니다."
+
+features:
+  - title: 이력서 분석
+    details:
+      - content: 이력서 PDF에서 텍스트 추출
+      - content: LLM이 핵심 키워드 목록과 요약문을 생성해 질문 생성의 맥락으로 활용
+
+  - title: 질문 생성 및 검토
+    details:
+      - content: 이력서와 채용공고를 바탕으로 맞춤형 질문 생성
+      - content: 질문 품질을 자체 검토한 결과에 따라 최대 3회 재생성
+
+  - title: 다중 면접관 평가
+    details:
+      - content: HR·실무·임원 면접관 페르소나 노드를 병렬로 실행해 답변을 동시에 평가
+
+  - title: 적응형 인터뷰 흐름
+    details:
+      - content: 답변 평가 점수가 6점 미만이면 같은 카테고리에서 추가 질문을 생성하고, 6점 이상이면 다음 카테고리로 이동
+
+  - title: 실시간 진행 상태 표시
+    details:
+      - content: '"답변을 평가하고 있어요", "질문을 생각하고 있어요" 같은 메시지로 면접 진행 상황을 실시간 안내'
+
+  - title: 최종 보고서
+    details:
+      - content: 누적된 평가를 바탕으로 종합 점수, 강약점, 카테고리별 피드백을 담은 보고서 생성
+
+decisions:
+  - 서버가 재시작되어도 면접 상태를 복원하고 이전 대화 기록을 조회할 수 있도록 `AsyncPostgresSaver`를 그래프 체크포인터로 사용했습니다. 세션 제목, 완료 여부처럼 목록 조회에 필요한 메타데이터는 별도의 `interview_sessions` 테이블에서 관리했습니다.
+
+  - LLM 처리 중 사용자가 막연히 기다리지 않도록 답변 제출 시 LangGraph의 노드 실행 이벤트를 감지해 SSE로 클라이언트에 전달했습니다. `EventSource`는 `GET` 요청만 지원하므로 `POST` 응답 스트림은 Fetch API의 `ReadableStream`으로 받았습니다. 버퍼에 쌓인 청크는 완성된 이벤트 단위로 파싱해 노드별 메시지를 채팅창에 표시했습니다.
+
+troubleshooting:
+  - title: 낙관적 업데이트로 사용자 메시지 UI 반영 지연 단축
+    problem: 답변을 제출해도 입력한 메시지가 채팅창에 바로 나타나지 않고 잠시 뒤에야 표시됐습니다. 채팅 UI에서 이런 지연은 사용자가 입력이 제대로 전송됐는지 의심하게 만듭니다.
+    analysis: 서버가 답변을 저장한 뒤에야 사용자 메시지를 상태에 추가하고 있었기 때문입니다. 사용자 메시지는 클라이언트가 이미 알고 있는 데이터라 서버 응답을 기다릴 이유가 없다고 판단했습니다. 다만 먼저 보여준 메시지가 서버 상태와 어긋나지 않도록 요청 성공과 실패 각각에 대한 처리 기준도 함께 정하기로 했습니다.
+    action: 답변을 제출하는 즉시 임시 ID를 붙인 사용자 메시지를 로컬 상태에 먼저 추가하는 낙관적 업데이트를 도입했습니다. 요청이 성공하면 임시 메시지를 서버가 확정한 메시지로 교체하고, 실패하면 대화 기록을 다시 조회해 서버 상태와 동기화했습니다.
+    result: "답변 제출 후 사용자 메시지가 화면에 표시되기까지의 **체감 대기 시간이 중앙값 기준 750.0ms에서 3.2ms로 약 99.6% 줄었습니다.**"
+
+  - title: Context 책임 분리로 사이드바 리렌더링 최적화
+    problem: 답변을 처리하는 동안 면접 진행과 직접 관련이 없는 사이드바가 불필요하게 자주 리렌더링됐습니다.
+    analysis: 현재 면접의 메시지·로딩 상태와 전체 세션 목록을 하나의 Context에서 함께 관리하고 있었습니다. Context 값이 바뀌면 이를 구독하는 컴포넌트가 모두 리렌더링되므로, 세션 목록만 사용하는 사이드바도 메시지가 추가되거나 로딩 상태가 바뀔 때마다 함께 리렌더링됐습니다. 면접 상태는 답변을 처리하는 동안 계속 바뀌지만, 세션 목록은 면접을 시작하거나 끝낼 때만 갱신하면 충분했습니다.
+    action: Context를 나눠 `SessionProvider`는 전체 세션 목록을, `InterviewProvider`는 현재 면접 상태를 관리하도록 했습니다. 사이드바 데이터는 면접을 시작하거나 종료하는 시점에만 `SessionProvider`의 `refresh()`를 호출해 동기화했습니다.
+    result: "답변 1회 처리 중 **사이드바 리렌더링 횟수가 10~14회에서 0회로 줄었습니다.**"
+
+  - title: 세션 전환 시 지연 응답으로 인한 레이스 컨디션 해결
+    problem: 대화 기록이나 보고서를 불러오는 도중 다른 세션으로 전환하면, 새로 연 세션 화면에 이전 세션의 데이터가 표시될 수 있었습니다.
+    analysis: 비동기 요청은 보낸 순서대로 응답이 도착한다는 보장이 없습니다. 이전 세션의 응답이 늦게 도착해도 그 응답이 어느 세션의 것인지 확인하지 않고 상태에 반영하고 있어, 현재 화면이 이전 데이터로 덮어써졌습니다.
+    action: 대화 요청은 현재 활성 세션 ID를 `ref`로 추적해, 응답과 SSE 이벤트를 상태에 반영하기 전에 요청 시점의 세션과 일치하는지 확인했습니다. 보고서 요청은 `useEffect` 정리 함수에서 무효화 플래그를 설정해 세션 전환 후 도착한 이전 응답을 무시하도록 했습니다.
+    result: 세션을 빠르게 전환해도 이전 세션의 응답이 현재 화면을 덮어쓰지 않고 선택한 세션의 대화 기록과 보고서만 표시됩니다.

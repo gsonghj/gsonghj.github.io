@@ -1,0 +1,42 @@
+---
+import { Font } from "astro:assets"
+
+interface Props {
+  title: string
+  description: string
+  image?: string
+}
+const { title, description, image = "/images/og-default.png" } = Astro.props
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site)
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary -->
+<title>{title}</title>
+<meta name="description" content={description} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="/favicon/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/favicon/site.webmanifest" />
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="ko_KR" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.site)} />
+<meta property="og:image:alt" content={title} />
+
+<!-- Font -->
+<Font cssVariable="--font-jetbrains-mono" />

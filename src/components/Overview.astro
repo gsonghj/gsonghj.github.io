@@ -1,0 +1,10 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+interface Props {
+  overview: CollectionEntry<"projects">["data"]["overview"][number]
+}
+const { overview } = Astro.props
+---
+
+<p set:html={overview} />
