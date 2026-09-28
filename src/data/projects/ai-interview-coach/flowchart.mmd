@@ -1,0 +1,18 @@
+flowchart LR
+  START -.-> |모의면접 시작| P(preprocess)
+  P --> END
+
+  START -.-> |자기소개 답변| G(generate)
+  G --> R(reflect)
+  R -.-> |재생성| G
+  R -.-> END
+
+  START -.-> |답변 제출| S(start_evaluate)
+  subgraph evaluate
+      S --> H(hr_evaluate) & M(manager_evaluate) & E(executive_evaluate)
+      H & M & E --> I(integrate)
+  end
+  I --> D(decide_next_action)
+  D -.-> G
+  D -.-> W(wrap_up)
+  W --> END

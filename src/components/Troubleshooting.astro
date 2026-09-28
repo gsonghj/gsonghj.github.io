@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+interface Props {
+  troubleshooting: CollectionEntry<"projects">["data"]["troubleshooting"][number]
+}
+const { troubleshooting } = Astro.props
+
+const steps = [
+  { key: "problem", label: "문제" },
+  { key: "analysis", label: "분석" },
+  { key: "action", label: "행동" },
+  { key: "result", label: "결과" },
+] as const
+---
+
+<div class="grid gap-2 md:grid-cols-12">
+  <h3 class="font-bold md:sticky md:top-26.5 md:col-span-4 md:self-start">
+    {troubleshooting.title}
+  </h3>
+  <dl class="flex flex-col gap-2 md:col-span-8">
+    {steps.map((step) => (
+      <div
+        class:list={[
+          "grid gap-2 md:grid-cols-[auto_1fr]",
+          step.key === "result" && "-mx-2 rounded-2xl bg-accent-soft p-2",
+        ]}
+      >
+        <dt
+          class:list={[
+            "text-sm font-medium",
+            step.key === "result" ? "text-accent" : "text-muted-foreground",
+          ]}
+        >
+          {step.label}
+        </dt>
+        <dd set:html={troubleshooting[step.key]} />
+      </div>
+    ))}
+  </dl>
+</div>

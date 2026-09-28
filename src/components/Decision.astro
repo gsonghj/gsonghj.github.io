@@ -1,0 +1,10 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+interface Props {
+  decision: CollectionEntry<"projects">["data"]["decisions"][number]
+}
+const { decision } = Astro.props
+---
+
+<li class="rounded-2xl border bg-surface md:odd:last:col-span-2" set:html={decision} />

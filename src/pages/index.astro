@@ -1,17 +1,101 @@
 ---
+import { getCollection } from "astro:content"
+import { Icon } from "astro-icon/components"
 
+import Footer from "@/components/Footer.astro"
+import Header from "@/components/Header.astro"
+import ProjectCard from "@/components/ProjectCard.astro"
+import { email, github } from "@/data/profile"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+
+const projects = (await getCollection("projects")).sort((a, b) =>
+  (b.data.period.end ?? "9999.12").localeCompare(a.data.period.end ?? "9999.12")
+)
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="송현정 프론트엔드 신입 포트폴리오"
+  description="송현정 프론트엔드 신입 포트폴리오입니다."
+>
+  <Header />
+
+  <main>
+    <section class="page-wrap">
+      <h1 class="font-bold">
+        <span class="block motion-safe:animate-reveal">
+          안녕하세요{" "}
+          <Icon
+            name="fluent-emoji-flat:waving-hand"
+            aria-hidden="true"
+            class="inline-block origin-[70%_70%] motion-safe:animate-wave"
+          />
+        </span>
+        <span class="block motion-safe:animate-reveal motion-safe:[animation-delay:90ms]">
+          프론트엔드 개발자 송현정입니다
+        </span>
+      </h1>
+
+      <p class="text-muted-foreground motion-safe:animate-reveal motion-safe:[animation-delay:180ms]">
+        <span class="font-medium text-foreground">팀과 함께</span> 고민하고, 그 답을{" "}
+        <span class="font-medium text-foreground">사용자 경험</span>으로 만듭니다
+      </p>
+
+      <div class="flex flex-wrap items-center gap-2 motion-safe:animate-reveal motion-safe:[animation-delay:270ms]">
+        {[github, email].map((item) => (
+          <a
+            href={item.href}
+            target={item.openInNewTab ? "_blank" : undefined}
+            rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+            aria-label={item.ariaLabel}
+            class="inline-flex h-10 items-center justify-center gap-2 rounded-full border bg-surface px-6 py-1.5 hover:-translate-y-0.5 hover:border-border-strong focus-visible:border-border-strong active:translate-y-0 motion-safe:transition-[border-color,translate]"
+          >
+            <Icon name={item.icon} aria-hidden="true" class="shrink-0" />
+            <span class="text-nowrap">{item.label}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-heading" class="page-wrap">
+      <h2 id="projects-heading" class="font-medium">
+        프로젝트
+      </h2>
+
+      <ul class="flex flex-col items-center justify-center gap-2">
+        {projects.map((project, index) => (
+          <li data-reveal>
+            <ProjectCard project={project} reverse={index % 2 === 1} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+<!-- TODO: 스크립트 확인하기 -->
+<script>
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries
+          .filter((entry) => entry.isIntersecting)
+          .forEach((entry, index) => {
+            const element = entry.target as HTMLElement
+            // 함께 들어온 요소는 순서대로 조금씩 늦게 떠오른다
+            element.style.animationDelay = `${index * 80}ms`
+            element.dataset.reveal = "revealed"
+            observer.unobserve(element)
+          })
+      },
+      // 대기 상태가 눈에 띄지 않도록 화면에 들어오는 즉시 재생한다
+      { rootMargin: "0px" }
+    )
+
+    document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((element) => {
+      if (element.getBoundingClientRect().top < innerHeight) return
+      element.dataset.reveal = "pending"
+      observer.observe(element)
+    })
+  }
+</script>

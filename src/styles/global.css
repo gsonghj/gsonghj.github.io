@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+
+  --background: oklch(0.985 0.002 250); /* #f9fafb */
+  --foreground: oklch(0.2 0.012 250); /* #12171b */
+  --muted: oklch(0.955 0.004 250); /* #eef0f3 */
+  --muted-foreground: oklch(0.46 0.012 250); /* #53595f */
+  --subtle-foreground: oklch(0.62 0.01 250); /* #82878c */
+  --surface: oklch(1 0 0); /* #ffffff */
+  --border: oklch(0.91 0.005 250); /* #dfe1e4 */
+  --border-strong: oklch(0.82 0.008 250); /* #c0c5c9 */
+  --accent: oklch(0.62 0.12 170); /* #109d7b */
+  --accent-fill: oklch(0.82 0.13 170); /* #5bdfb7 */
+  --accent-fill-foreground: oklch(0.2 0.012 250); /* #12171b */
+  --accent-soft: oklch(0.95 0.04 170); /* #d5f8ea */
+
+  --glass-background: oklch(0.985 0.002 250 / 0.72);
+  --glass-border: oklch(0.2 0.012 250 / 0.08);
+  --glass-highlight: oklch(1 0 0 / 0.6);
+  --glass-shadow: oklch(0.2 0.012 250 / 0.08);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: oklch(0.17 0.006 250); /* #0d1012 */
+  --foreground: oklch(0.95 0.004 250); /* #eceff1 */
+  --muted: oklch(0.24 0.008 250); /* #1c2023 */
+  --muted-foreground: oklch(0.72 0.01 250); /* #a0a5ab */
+  --subtle-foreground: oklch(0.56 0.01 250); /* #70757a */
+  --surface: oklch(0.205 0.008 250); /* #14171b */
+  --border: oklch(0.28 0.008 250); /* #26292d */
+  --border-strong: oklch(0.38 0.01 250); /* #3e4348 */
+  --accent: oklch(0.82 0.13 170); /* #5bdfb7 */
+  --accent-fill: oklch(0.82 0.13 170); /* #5bdfb7 */
+  --accent-fill-foreground: oklch(0.18 0.03 170); /* #031610 */
+  --accent-soft: oklch(0.27 0.05 170); /* #042e23 */
+
+  --glass-background: oklch(0.205 0.008 250 / 0.6);
+  --glass-border: oklch(0.95 0.004 250 / 0.1);
+  --glass-highlight: oklch(1 0 0 / 0.06);
+  --glass-shadow: oklch(0 0 0 / 0.4);
+}
+
+@theme inline {
+  --font-sans: "Pretendard Variable", Pretendard, system-ui, ui-sans-serif, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-fill: var(--accent-fill);
+  --color-accent-fill-foreground: var(--accent-fill-foreground);
+  --color-accent-soft: var(--accent-soft);
+
+  --default-transition-duration: 300ms;
+  --default-transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-reveal: reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem); /* 24px */
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  --animate-wave: wave 3.6s ease-in-out infinite;
+  @keyframes wave {
+    0%,
+    60%,
+    100% {
+      transform: rotate(0deg);
+    }
+    12%,
+    36% {
+      transform: rotate(16deg);
+    }
+    24% {
+      transform: rotate(-8deg);
+    }
+    48% {
+      transform: rotate(-4deg);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply bg-background font-sans wrap-break-word break-keep text-foreground antialiased motion-safe:scroll-smooth motion-safe:transition-[color,background-color];
+  }
+
+  body {
+    @apply min-h-svh;
+  }
+
+  code {
+    @apply font-mono text-[0.875em];
+  }
+
+  ::selection {
+    @apply bg-accent-soft text-foreground;
+  }
+
+  :focus {
+    @apply outline-hidden;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-accent outline-offset-2;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+[data-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(1.5rem); /* 24px */
+}
+
+[data-reveal="revealed"] {
+  animation: var(--animate-reveal);
+}
+
+@utility page-wrap {
+  @apply mx-auto w-full max-w-6xl px-6 motion-safe:transition-[padding] md:px-12;
+}
+
+@utility section-heading {
+  @apply font-bold;
+}
+
+@utility side-heading {
+  @apply text-sm font-medium text-muted-foreground;
+}
+
+@utility glass {
+  border: 1px solid var(--glass-border);
+  background-color: var(--glass-background);
+  box-shadow:
+    0 8px 32px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+}
+
+@utility glass-button {
+  @apply inline-grid size-11 place-items-center rounded-full glass active:scale-[0.98] motion-safe:transition-[background-color,box-shadow,scale];
+
+  @variant hover, focus-visible {
+    box-shadow:
+      0 12px 40px var(--glass-shadow),
+      inset 0 1px 0 var(--glass-highlight);
+  }
+}

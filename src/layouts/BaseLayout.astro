@@ -1,0 +1,39 @@
+---
+import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css"
+import "@/styles/global.css"
+
+import Head from "@/components/Head.astro"
+import ScrollToTop from "@/components/ScrollToTop.astro"
+
+interface Props {
+  title: string
+  description: string
+  image?: string
+}
+const { title, description, image } = Astro.props
+---
+
+<html lang="ko">
+  <head>
+    <Head title={title} description={description} image={image} />
+    <script is:inline>
+      let theme
+
+      try {
+        theme = localStorage.getItem("theme")
+      } catch {
+        // 저장된 테마를 읽을 수 없으면 아래에서 시스템 설정을 사용한다.
+      }
+
+      if (theme !== "light" && theme !== "dark") {
+        theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+      }
+
+      document.documentElement.classList.toggle("dark", theme === "dark")
+    </script>
+  </head>
+  <body>
+    <slot />
+    <ScrollToTop />
+  </body>
+</html>

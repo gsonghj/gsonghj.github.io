@@ -1,0 +1,248 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { Icon } from "astro-icon/components"
+
+import Carousel from "@/components/Carousel.astro"
+import Footer from "@/components/Footer.astro"
+import Header from "@/components/Header.astro"
+import TechStack from "@/components/TechStack.astro"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+
+interface Props {
+  project: CollectionEntry<"projects">
+}
+const {
+  project: {
+    id,
+    data: {
+      title,
+      description,
+      type,
+      period,
+      techStack,
+      links,
+      accounts,
+      images,
+      features,
+      decisions,
+      troubleshooting,
+    },
+  },
+} = Astro.props
+---
+
+<BaseLayout
+  title={`${title} | 송현정 포트폴리오`}
+  description={description}
+  image={`/images/${id}.png`}
+>
+  <Header />
+
+  <main>
+    <div class="page-wrap">
+      <a
+        href="/#projects"
+        class="group inline-flex items-center justify-center gap-2 side-heading hover:text-foreground focus-visible:text-foreground motion-safe:transition-[color]"
+      >
+        <Icon
+          name="radix-icons:chevron-left"
+          aria-hidden="true"
+          class="shrink-0 translate-x-0.5 group-hover:-translate-x-0.5 group-focus-visible:-translate-x-0.5 motion-safe:transition-[translate]"
+        />
+        <span class="text-nowrap">프로젝트 목록으로</span>
+      </a>
+    </div>
+
+    <article aria-labelledby="project-title">
+      <header class="page-wrap">
+        <p class="flex flex-wrap items-center gap-2 font-light text-muted-foreground">
+          <span>{type}</span>
+          <span>|</span>
+          <span>{`${period.start} - ${period.end ?? "진행 중"}`}</span>
+        </p>
+        <h1 id="project-title" class="font-bold">
+          {title}
+        </h1>
+      </header>
+
+      <section aria-label="스크린샷 캐러셀" class="page-wrap">
+        <Carousel images={images} alt={`${title} 스크린샷`} />
+      </section>
+
+      <section aria-labelledby="overview-heading" class="page-wrap grid gap-2 md:grid-cols-12">
+        <div class="md:col-span-7">
+          <h2 id="overview-heading" class="section-heading">
+            프로젝트 소개
+          </h2>
+          <div class="flex flex-col gap-2">
+            <slot name="overview" />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 md:col-span-4 md:col-start-9">
+          <div>
+            <h3 class="side-heading">기술 스택</h3>
+            <TechStack items={techStack} />
+          </div>
+
+          <div>
+            <h3 class="side-heading">링크</h3>
+            <div class="flex flex-wrap items-center gap-2">
+              <a
+                href={links.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${title} 깃허브 (새 탭에서 열림)`}
+                class="inline-flex h-9 items-center justify-center gap-2 rounded-full border bg-surface px-3 py-1.5 text-sm hover:border-accent-soft hover:bg-accent-fill hover:text-accent-fill-foreground focus-visible:border-accent-soft focus-visible:bg-accent-fill focus-visible:text-accent-fill-foreground active:scale-[0.98] motion-safe:transition-[color,background-color,border-color,scale]"
+              >
+                <Icon name="radix-icons:github-logo" aria-hidden="true" class="shrink-0" />
+                <span class="text-nowrap">깃허브</span>
+              </a>
+
+              {links.demo && (
+                <a
+                  href={links.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${title} 데모 (새 탭에서 열림)`}
+                  class="inline-flex h-9 items-center justify-center gap-2 rounded-full border bg-surface px-3 py-1.5 text-sm hover:border-accent-soft hover:bg-accent-fill hover:text-accent-fill-foreground focus-visible:border-accent-soft focus-visible:bg-accent-fill focus-visible:text-accent-fill-foreground active:scale-[0.98] motion-safe:transition-[color,background-color,border-color,scale]"
+                >
+                  <Icon name="radix-icons:globe-2" aria-hidden="true" class="shrink-0" />
+                  <span class="text-nowrap">데모</span>
+                </a>
+              )}
+            </div>
+          </div>
+
+          {accounts.length > 0 && (
+            <div>
+              <h3 class="side-heading">테스트 계정</h3>
+              <table class="w-full border-collapse text-sm">
+                <caption class="sr-only">테스트 계정 정보</caption>
+                <thead class="sr-only">
+                  <tr>
+                    <th scope="col">구분</th>
+                    <th scope="col">아이디와 비밀번호</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {accounts.map((account) => (
+                    <tr class="border-t last:border-b">
+                      <th scope="row" class="py-2 text-left align-top font-medium">
+                        {account.label}
+                      </th>
+                      <td class="py-2">
+                        {[
+                          { value: account.username, name: "아이디" },
+                          { value: account.password, name: "비밀번호" },
+                        ].map(({ value, name }) => (
+                          <button
+                            type="button"
+                            data-copy={value}
+                            aria-label={`${account.label} ${name} 복사`}
+                            class="inline-flex w-full items-center justify-between gap-2 text-left font-mono text-muted-foreground hover:text-foreground focus-visible:text-foreground motion-safe:transition-[color]"
+                          >
+                            <span class="break-all">{value}</span>
+                            <Icon name="radix-icons:copy" aria-hidden="true" class="shrink-0" />
+                          </button>
+                        ))}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {features.length > 0 && (
+        <section aria-labelledby="features-heading" class="page-wrap">
+          <h2 id="features-heading" class="section-heading">
+            주요 기능
+          </h2>
+          <div class="grid gap-2 md:grid-cols-[auto_1fr]">
+            <slot name="features" />
+          </div>
+        </section>
+      )}
+
+      <slot name="supplementary" />
+
+      {decisions.length > 0 && (
+        <section aria-labelledby="decisions-heading" class="page-wrap">
+          <h2 id="decisions-heading" class="section-heading">
+            기술적 고민과 선택
+          </h2>
+          <ul class="grid gap-2 md:grid-cols-2">
+            <slot name="decisions" />
+          </ul>
+        </section>
+      )}
+
+      {troubleshooting.length > 0 && (
+        <section aria-labelledby="troubleshooting-heading" class="page-wrap">
+          <h2 id="troubleshooting-heading" class="section-heading">
+            문제 해결 과정
+          </h2>
+          <div class="flex flex-col gap-2">
+            <slot name="troubleshooting" />
+          </div>
+        </section>
+      )}
+    </article>
+  </main>
+
+  <Footer />
+
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+    class="pointer-events-none invisible fixed top-4 left-1/2 z-50 inline-flex -translate-x-1/2 -translate-y-4 items-center justify-center gap-2 rounded-lg glass px-6 py-3 text-sm opacity-0 data-visible:visible data-visible:translate-y-0 data-visible:opacity-100 motion-safe:transition-[opacity,translate,visibility]"
+  >
+    <Icon
+      name="radix-icons:check-circled"
+      data-toast-icon="success"
+      aria-hidden="true"
+      class="hidden shrink-0"
+    />
+    <Icon
+      name="radix-icons:cross-circled"
+      data-toast-icon="error"
+      aria-hidden="true"
+      class="hidden shrink-0"
+    />
+    <span data-toast-message class="text-nowrap"></span>
+  </div>
+</BaseLayout>
+
+<script>
+  const toast = document.querySelector<HTMLElement>("#toast")
+  const toastMessage = toast?.querySelector<HTMLElement>("[data-toast-message]")
+  const toastIcons = toast?.querySelectorAll<SVGElement>("[data-toast-icon]") ?? []
+  let toastTimeout: ReturnType<typeof setTimeout>
+
+  document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      if (!toast || !toastMessage) return
+
+      let state: "success" | "error" = "success"
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy ?? "")
+      } catch {
+        state = "error"
+      }
+
+      toastIcons.forEach((icon) =>
+        icon.classList.toggle("hidden", icon.dataset.toastIcon !== state)
+      )
+      toastMessage.textContent =
+        state === "success" ? "클립보드에 복사했습니다" : "복사하지 못했습니다"
+
+      toast.toggleAttribute("data-visible", true)
+      clearTimeout(toastTimeout)
+      toastTimeout = setTimeout(() => toast.toggleAttribute("data-visible", false), 2500)
+    })
+  })
+</script>

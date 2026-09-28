@@ -1,0 +1,50 @@
+---
+import { Image } from "astro:assets"
+import type { CollectionEntry } from "astro:content"
+import { Icon } from "astro-icon/components"
+
+import TechStack from "@/components/TechStack.astro"
+
+interface Props {
+  project: CollectionEntry<"projects">
+  reverse?: boolean
+}
+const {
+  project: { id, data },
+  reverse = false,
+} = Astro.props
+---
+
+<div class="group relative grid gap-2 md:grid-cols-12">
+  <div
+    class:list={[
+      "aspect-5/3 min-w-0 overflow-hidden rounded-2xl border bg-surface md:col-span-7",
+      reverse && "md:order-last",
+    ]}
+  >
+    <Image
+      src={data.thumbnail}
+      alt={`${data.title} 썸네일`}
+      class="block size-full object-cover group-hover:scale-[1.02] motion-safe:transition-[scale] motion-safe:duration-500"
+    />
+  </div>
+
+  <div class="flex flex-col gap-2 md:col-span-5">
+    <p class="text-muted-foreground">{data.type}</p>
+
+    <h3 class="flex items-center justify-between font-semibold text-nowrap underline decoration-transparent decoration-2 underline-offset-8 group-hover:decoration-accent focus-visible:decoration-accent motion-safe:transition-[text-decoration-color]">
+      <a href={`/projects/${id}`} class="after:absolute after:inset-0 after:z-1">
+        {data.title}
+      </a>
+      <Icon
+        name="radix-icons:arrow-right"
+        aria-hidden="true"
+        class="shrink-0 -translate-x-0.5 group-hover:translate-x-0.5 motion-safe:transition-[translate]"
+      />
+    </h3>
+
+    <p class="text-muted-foreground">{data.description}</p>
+
+    <TechStack items={data.techStack} />
+  </div>
+</div>
