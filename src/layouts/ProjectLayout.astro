@@ -39,7 +39,7 @@ const {
   <Header />
 
   <main>
-    <div class="page-wrap">
+    <div class="page-wrap pt-4 md:pt-8">
       <a
         href="/#projects"
         class="group inline-flex items-center justify-center gap-2 side-heading hover:text-foreground focus-visible:text-foreground motion-safe:transition-[color]"
@@ -54,46 +54,48 @@ const {
     </div>
 
     <article aria-labelledby="project-title">
-      <header class="page-wrap">
-        <p class="flex flex-wrap items-center gap-2 font-light text-muted-foreground">
+      <header class="page-wrap mt-6 md:mt-8">
+        <p class="flex flex-wrap items-center gap-x-3 gap-y-1 side-heading">
           <span>{type}</span>
-          <span>|</span>
-          <span>{`${period.start} - ${period.end ?? "진행 중"}`}</span>
+          <span class="tabular-nums">{`${period.start} - ${period.end ?? "진행 중"}`}</span>
         </p>
-        <h1 id="project-title" class="font-bold">
+        <h1 id="project-title" class="mt-2 text-title">
           {title}
         </h1>
       </header>
 
-      <section aria-label="스크린샷 캐러셀" class="page-wrap">
+      <section aria-label="스크린샷 캐러셀" class="page-wrap mt-8 md:mt-12">
         <Carousel images={images} alt={`${title} 스크린샷`} />
       </section>
 
-      <section aria-labelledby="overview-heading" class="page-wrap grid gap-2 md:grid-cols-12">
+      <section
+        aria-labelledby="overview-heading"
+        class="page-wrap mt-16 grid gap-12 md:mt-24 md:grid-cols-12 md:gap-8"
+      >
         <div class="md:col-span-7">
           <h2 id="overview-heading" class="section-heading">
             프로젝트 소개
           </h2>
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-4">
             <slot name="overview" />
           </div>
         </div>
 
-        <div class="flex flex-col gap-2 md:col-span-4 md:col-start-9">
+        <div class="flex flex-col gap-8 md:col-span-4 md:col-start-9">
           <div>
-            <h3 class="side-heading">기술 스택</h3>
+            <h3 class="mb-2 side-heading">기술 스택</h3>
             <TechStack items={techStack} />
           </div>
 
           <div>
-            <h3 class="side-heading">링크</h3>
+            <h3 class="mb-2 side-heading">링크</h3>
             <div class="flex flex-wrap items-center gap-2">
               <a
                 href={links.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${title} 깃허브 (새 탭에서 열림)`}
-                class="inline-flex h-9 items-center justify-center gap-2 rounded-full border bg-surface px-3 py-1.5 text-sm hover:border-accent-soft hover:bg-accent-fill hover:text-accent-fill-foreground focus-visible:border-accent-soft focus-visible:bg-accent-fill focus-visible:text-accent-fill-foreground active:scale-[0.98] motion-safe:transition-[color,background-color,border-color,scale]"
+                class="pill-button h-9 px-4 text-label"
               >
                 <Icon name="radix-icons:github-logo" aria-hidden="true" class="shrink-0" />
                 <span class="text-nowrap">깃허브</span>
@@ -105,7 +107,7 @@ const {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${title} 데모 (새 탭에서 열림)`}
-                  class="inline-flex h-9 items-center justify-center gap-2 rounded-full border bg-surface px-3 py-1.5 text-sm hover:border-accent-soft hover:bg-accent-fill hover:text-accent-fill-foreground focus-visible:border-accent-soft focus-visible:bg-accent-fill focus-visible:text-accent-fill-foreground active:scale-[0.98] motion-safe:transition-[color,background-color,border-color,scale]"
+                  class="pill-button h-9 px-4 text-label"
                 >
                   <Icon name="radix-icons:globe-2" aria-hidden="true" class="shrink-0" />
                   <span class="text-nowrap">데모</span>
@@ -116,8 +118,8 @@ const {
 
           {accounts.length > 0 && (
             <div>
-              <h3 class="side-heading">테스트 계정</h3>
-              <table class="w-full border-collapse text-sm">
+              <h3 class="mb-2 side-heading">테스트 계정</h3>
+              <table class="w-full border-collapse text-label">
                 <caption class="sr-only">테스트 계정 정보</caption>
                 <thead class="sr-only">
                   <tr>
@@ -128,10 +130,10 @@ const {
                 <tbody>
                   {accounts.map((account) => (
                     <tr class="border-t last:border-b">
-                      <th scope="row" class="py-2 text-left align-top font-medium">
+                      <th scope="row" class="py-2 pr-4 text-left align-top font-medium text-nowrap">
                         {account.label}
                       </th>
-                      <td class="py-2">
+                      <td class="space-y-2 py-2">
                         {[
                           { value: account.username, name: "아이디" },
                           { value: account.password, name: "비밀번호" },
@@ -140,7 +142,7 @@ const {
                             type="button"
                             data-copy={value}
                             aria-label={`${account.label} ${name} 복사`}
-                            class="inline-flex w-full items-center justify-between gap-2 text-left font-mono text-muted-foreground hover:text-foreground focus-visible:text-foreground motion-safe:transition-[color]"
+                            class="inline-flex w-full items-center justify-between gap-2 text-left font-mono font-normal text-muted-foreground hover:text-foreground focus-visible:text-foreground motion-safe:transition-[color]"
                           >
                             <span class="break-all">{value}</span>
                             <Icon name="radix-icons:copy" aria-hidden="true" class="shrink-0" />
@@ -157,11 +159,11 @@ const {
       </section>
 
       {features.length > 0 && (
-        <section aria-labelledby="features-heading" class="page-wrap">
+        <section aria-labelledby="features-heading" class="page-wrap mt-16 md:mt-24">
           <h2 id="features-heading" class="section-heading">
             주요 기능
           </h2>
-          <div class="grid gap-2 md:grid-cols-[auto_1fr]">
+          <div class="grid gap-y-3 md:grid-cols-[auto_1fr] md:items-baseline md:gap-x-12 md:gap-y-8">
             <slot name="features" />
           </div>
         </section>
@@ -170,22 +172,22 @@ const {
       <slot name="supplementary" />
 
       {decisions.length > 0 && (
-        <section aria-labelledby="decisions-heading" class="page-wrap">
+        <section aria-labelledby="decisions-heading" class="page-wrap mt-16 md:mt-24">
           <h2 id="decisions-heading" class="section-heading">
             기술적 고민과 선택
           </h2>
-          <ul class="grid gap-2 md:grid-cols-2">
+          <ul class="grid gap-4 md:grid-cols-2">
             <slot name="decisions" />
           </ul>
         </section>
       )}
 
       {troubleshooting.length > 0 && (
-        <section aria-labelledby="troubleshooting-heading" class="page-wrap">
+        <section aria-labelledby="troubleshooting-heading" class="page-wrap mt-16 md:mt-24">
           <h2 id="troubleshooting-heading" class="section-heading">
             문제 해결 과정
           </h2>
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-16">
             <slot name="troubleshooting" />
           </div>
         </section>
@@ -199,7 +201,7 @@ const {
     id="toast"
     role="status"
     aria-live="polite"
-    class="pointer-events-none invisible fixed top-4 left-1/2 z-50 inline-flex -translate-x-1/2 -translate-y-4 items-center justify-center gap-2 rounded-lg glass px-6 py-3 text-sm opacity-0 data-visible:visible data-visible:translate-y-0 data-visible:opacity-100 motion-safe:transition-[opacity,translate,visibility]"
+    class="pointer-events-none invisible fixed top-4 left-1/2 z-50 inline-flex -translate-x-1/2 -translate-y-4 items-center justify-center gap-2 rounded-full glass px-6 py-3 text-label opacity-0 data-visible:visible data-visible:translate-y-0 data-visible:opacity-100 motion-safe:transition-[opacity,translate,visibility]"
   >
     <Icon
       name="radix-icons:check-circled"

@@ -4,7 +4,7 @@ import { Icon } from "astro-icon/components"
 import { profile } from "@/data/profile"
 ---
 
-<footer class="m-4 page-wrap flex flex-col items-center justify-center gap-2 motion-safe:transition-[margin] md:mx-8 md:my-6">
+<footer class="page-wrap mt-16 mb-4 flex flex-col items-center justify-center gap-2 motion-safe:transition-[margin] md:mt-24 md:mb-6">
   <div class="flex flex-wrap items-center justify-center gap-2">
     {profile.map((item) => (
       <a
@@ -12,7 +12,7 @@ import { profile } from "@/data/profile"
         target={item.openInNewTab ? "_blank" : undefined}
         rel={item.openInNewTab ? "noopener noreferrer" : undefined}
         aria-label={item.ariaLabel}
-        class="inline-grid place-items-center text-nowrap text-muted-foreground underline decoration-transparent decoration-1 underline-offset-4 hover:text-foreground hover:decoration-foreground focus-visible:text-foreground focus-visible:decoration-foreground motion-safe:transition-[color,text-decoration-color]"
+        class="inline-grid place-items-center side-heading text-nowrap underline decoration-transparent decoration-1 underline-offset-4 hover:text-foreground hover:decoration-foreground focus-visible:text-foreground focus-visible:decoration-foreground motion-safe:transition-[color,text-decoration-color]"
       >
         {item.label}
       </a>

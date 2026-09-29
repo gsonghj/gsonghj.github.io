@@ -7,7 +7,7 @@ import { profile } from "@/data/profile"
 
 <header
   id="header"
-  class="sticky top-4 z-40 m-4 flex items-center justify-between gap-2 rounded-full glass p-2 motion-safe:transition-[margin,top] md:top-6 md:mx-8 md:my-6"
+  class="sticky top-4 z-40 m-4 flex h-header items-center justify-between gap-2 rounded-full glass p-2 motion-safe:transition-[margin,top] md:top-6 md:mx-8 md:my-6"
 >
   <a href="/" class="ml-3 h-lh overflow-hidden font-semibold">
     송현정 포트폴리오
@@ -21,7 +21,7 @@ import { profile } from "@/data/profile"
           target={item.openInNewTab ? "_blank" : undefined}
           rel={item.openInNewTab ? "noopener noreferrer" : undefined}
           aria-label={item.ariaLabel}
-          class="inline-grid size-9 place-items-center rounded-full text-muted-foreground hover:bg-foreground/6 hover:text-foreground focus-visible:bg-foreground/6 focus-visible:text-foreground motion-safe:transition-[color,background-color,padding,width] md:w-auto md:px-3 md:py-1.5"
+          class="inline-grid size-9 place-items-center rounded-full side-heading hover:bg-foreground/6 hover:text-foreground focus-visible:bg-foreground/6 focus-visible:text-foreground motion-safe:transition-[color,background-color,padding,width] md:w-auto md:px-3 md:py-1.5"
         >
           <Icon name={item.icon} aria-hidden="true" class="shrink-0 md:hidden" />
           <span class="hidden text-nowrap md:block">{item.label}</span>

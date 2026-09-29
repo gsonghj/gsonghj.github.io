@@ -14,21 +14,23 @@ const steps = [
 ] as const
 ---
 
-<div class="grid gap-2 md:grid-cols-12">
-  <h3 class="font-bold md:sticky md:top-26.5 md:col-span-4 md:self-start">
+{/* 모바일: 모두 세로로 쌓음 / md: 제목 위, 레이블과 본문 좌우 / lg: 제목 왼쪽 sticky */}
+<div class="grid gap-3 md:gap-6 lg:grid-cols-12 lg:gap-8">
+  <h3 class="text-subheading lg:sticky lg:top-[calc(var(--spacing-header)+(--spacing(12)))] lg:col-span-4 lg:self-start">
     {troubleshooting.title}
   </h3>
-  <dl class="flex flex-col gap-2 md:col-span-8">
+  <dl class="grid gap-y-5 md:grid-cols-[auto_1fr] md:gap-x-10 lg:col-span-8">
     {steps.map((step) => (
       <div
         class:list={[
-          "grid gap-2 md:grid-cols-[auto_1fr]",
-          step.key === "result" && "-mx-2 rounded-2xl bg-accent-soft p-2",
+          "grid gap-2 md:col-span-2 md:grid-cols-subgrid md:items-baseline md:gap-x-10",
+          step.key === "result" &&
+            "-mx-4 rounded-2xl bg-accent-muted p-4 dark:ring-1 dark:ring-accent/35",
         ]}
       >
         <dt
           class:list={[
-            "text-sm font-medium",
+            "text-label",
             step.key === "result" ? "text-accent" : "text-muted-foreground",
           ]}
         >

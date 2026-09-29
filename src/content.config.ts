@@ -4,7 +4,7 @@ import { defineCollection } from "astro:content"
 
 // `코드`: font-mono text-sm
 // **굵게**: font-semibold
-// ==강조==: font-semibold text-accent
+// ==강조==: highlight
 const inline = z.string().transform((s) =>
   s
     .replace(/&/g, "&amp;")
@@ -16,7 +16,7 @@ const inline = z.string().transform((s) =>
         ? `<code>${part.slice(1, -1)}</code>`
         : part
             .replace(/\*\*([^*]+)\*\*/g, '<span class="font-semibold">$1</span>')
-            .replace(/==([^=]+)==/g, '<span class="font-semibold text-accent">$1</span>')
+            .replace(/==([^=]+)==/g, '<span class="highlight">$1</span>')
     )
     .join("")
 )

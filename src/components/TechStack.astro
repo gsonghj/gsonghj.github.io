@@ -1,12 +1,15 @@
 ---
 interface Props {
   items: string[]
+  class?: string
 }
-const { items } = Astro.props
+const { items, class: className } = Astro.props
 ---
 
-<ul class="flex flex-wrap items-center gap-2">
+<ul class:list={["flex flex-wrap items-center gap-1.5", className]}>
   {items.map((item) => (
-    <li class="rounded-sm bg-muted px-1 py-0.5 font-mono text-sm text-muted-foreground">{item}</li>
+    <li class="rounded-md bg-muted px-2 py-0.5 font-mono text-caption font-normal text-muted-foreground">
+      {item}
+    </li>
   ))}
 </ul>

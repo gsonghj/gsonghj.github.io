@@ -7,13 +7,13 @@ interface Props {
 const { feature } = Astro.props
 ---
 
-<h3 class="font-semibold text-nowrap">{feature.title}</h3>
-<ul class="ml-4.5 list-disc marker:text-border">
+<h3 class="mt-5 text-subheading text-nowrap first:mt-0 md:mt-0">{feature.title}</h3>
+<ul class="ml-4.5 list-disc marker:text-border-strong">
   {feature.details.map(({ content, tag }) => (
     <li>
       <Fragment set:html={content} />
       {tag && (
-        <span class="ml-1 rounded-sm bg-accent-soft px-1 py-0.5 text-sm font-medium text-accent">
+        <span class="ml-1.5 rounded-md border px-1.5 py-0.5 text-caption text-nowrap text-muted-foreground">
           {tag}
         </span>
       )}
